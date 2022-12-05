@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录界面</title>
+    <link rel="stylesheet" href="CSS/style01.css">
+    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>-->
+</head>
+<body>
+<div class="main">
+    <div class="Login_div">
+        <form action="exam.html" method="post">
+           <img src="image/image.03">
+            <div class="eneter">
+                <input id="number" type="text" placeholder="账号">
+                <input id="password" type="password" placeholder="密码">
+                <span id="mm"></span>
+            </div>
+            <a href="forget.html">忘记密码？</a>
+            <button id="submit_button" onclick="yanzheng()">登录</button>
+        </form>
+    </div>
+    <div class="Options_div">
+        <div id="Switch_Registered">
+            <h1>没有账号？</h1>
+            <p>请点击前往注册</p>
+            <button id="Registered_button">前往注册</button>
+        </div>
+        <div id="Switch_Login">
+            <h1>已有账号？</h1>
+            <p>请点击前往登陆</p>
+            <button id="Login_button" >前往登录</button>
+        </div>
+    </div>
+    <div class="Registered_div">
+        <form action="#">
+            <h1>注册</h1>
+            <span id="zc"></span>
+            <div class="eneter">
+                <input id="number1" type="text" placeholder="账号">
+                <input id="password1" type="password" placeholder="密码">
+                <input id="confirm_password" type="password" placeholder="确认密码">
+            </div>
+            <button id="submit_button_1">确认注册</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    setInterval(function(){
+        var img = $("<img src='image/snow.jpg'>");
+        $("body").append(img);
+        var size = parseInt(Math.random()*21)+20;
+        img.css("width",size+"px");
+        var w = $(window).width();
+        var left =parseInt(Math.random()*(w-size));
+        img.css("left",left+"px");
+        var top = $(window).height()-size;
+        img.animate({"top":top+"px"},size*100)
+        },10)
+    $(function() {
+            $("#Registered_button").click(function(){
+                $(".Login_div").animate({width:"0",opacity:"0"});
+                $(".Registered_div").animate({width:"50%",opacity:"1"});
+                $("#Switch_Registered").animate({opacity:"0"});
+                $("#Switch_Login").animate({opacity:"1"});
+                $("#Switch_Registered").slideUp();
+                $("#Switch_Login").slideDown();
+            });
+            $("#Login_button").click(function(){
+                $(".Registered_div").animate({width:"0",opacity:"0"});
+                $(".Login_div").animate({width:"50%",opacity:"1"});
+                $("#Switch_Login").animate({opacity:"0"});
+                $("#Switch_Registered").animate({opacity:"1"});
+                $("#Switch_Login").slideUp();
+                $("#Switch_Registered").slideDown(500);
+            });
+            $("#submit_button_1").click(function (){
+                var number_1 = $("#number1").val();
+                var password_1 = $("#password1").val();
+                var confirm_password_1 = $("#confirm_password").val();
+                var number1_password1_c = "number1=" + number_1 + "&password1=" + password_1 + "&confirm_password=" + confirm_password_1;
+    $.ajax({ url: "/Project01/loginSuccess?number1=" + number_1 + "&password1=" + password_1 + "&confirm_password=" + confirm_password_1,
+        data:{},
+        success: function(data){
+            if(data.toString() == "注册成功!") {
+                $("#zc").css("color", "green");
+            }else if(data.toString() == "用户名或密码不能为空"){
+                $("#zc").css("color", "red");
+            }else if(data.toString() == "用户名或密码输入错误,请重新输入!"){
+                $("#zc").css("color", "red");
+            }else if(data.toString() == "密码和确认密码不匹配!"){
+                $("#zc").css("color", "red");
+            }
+            $("#zc").html(data).css("color","green");
+        }
+    })
+    })
+    })
+    function yanzheng(){
+     var number_v = document.getElementById("number").value;
+     var password_v = document.getElementById("password").value;
+     var span_v = document.querySelector("#mm");
+     var submit_buton_v = document.getElementById("submit_button");
+     var msg = true;
+             var number_vv = number_v.trim();
+             var password_vv = password_v.trim();
+             if (number_vv === "" || password_vv === "") {
+                 span_v.innerHTML = "请输入用户名或密码!";
+                 span_v.style.color = "red";
+                 msg = false;
+                 flag = msg;
+             } else {
+                 if (number_vv === "admin" && password_vv === "123456") {
+                     var time = 3;
+                     span_v.style.color = "green";
+                     callback();
+                     setInterval(callback,1000);
+                     function callback(){
+                         if(time == 0){
+                             location.href = 'success.html';
+                         }else{
+                             span_v.innerHTML = '登录成功!将在' + time + '秒钟后跳转';
+                             span_v.style.color = "blue";
+                             time--;
+                         }
+                     }
+                     return true;
+                 } else {
+                     span_v.innerHTML = "用户名或密码错误!";
+                     span_v.style.color = "red";
+                     msg = false;
+                     return msg;
+                 }
+             }
+}
+</script>
